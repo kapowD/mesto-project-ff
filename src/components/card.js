@@ -1,7 +1,12 @@
 // создание элемента
-const content = document.querySelector("#card-template").content;
-export const createCard = (element, deleteCard, likeCard, openImage) => {
-  const card = content.querySelector(".places__item").cloneNode(true);
+
+export const createCard = (
+  element, 
+  handleDeleteCard,
+  handleLikeClick,
+  handleImageClick
+) => {
+  const card = getTemplate();
   const cardTitle = card.querySelector(".card__title");
   const cardImage = card.querySelector(".card__image");
   const cardDelete = card.querySelector(".card__delete-button");
@@ -11,21 +16,29 @@ export const createCard = (element, deleteCard, likeCard, openImage) => {
   cardImage.src = element.link;
   cardImage.alt = element.name;
 
-  cardDelete.addEventListener("click", deleteCard);
+  cardDelete.addEventListener("click", handleDeleteCard);
 
-  cardLike.addEventListener("click", likeCard);
+  cardLike.addEventListener("click", handleLikeClick);
 
-  cardImage.addEventListener("click", () => openImage(element));
+  cardImage.addEventListener("click", () => handleImageClick(element));
 
   return card;
 };
+
+const getTemplate = () => {
+  return document
+    .querySelector("#card-template")
+    .content.querySelector(".places__item")
+    .cloneNode(true);
+};
 // удаление элемента
-export const handleDelete = (evt) => {
+
+export const handleDeleteCard = (evt) => {
   const card = evt.target.closest(".places__item");
   card.remove();
 };
 // лайк элемента
-export const handleLike = (evt) => {
+export const handleLikeClick = (evt) => {
   const card = evt.target;
   card.classList.toggle("card__like-button_is-active");
 };
