@@ -1,3 +1,11 @@
+import './index.css';
+import { initialCards } from "../components/cards.js";
+import {
+  openModal,
+  closeModal,
+  handleOverlayClose,
+} from "../components/modal.js";
+import { createCard, handleDelete, handleLike } from "../components/card.js";
 // формы
 const profileDescription = document.querySelector(".profile__description");
 const profileName = document.querySelector(".profile__title");
@@ -88,10 +96,4 @@ initialCards.forEach((card) => {
   renderCard(createCard(card, handleDelete, handleLike, handleOpenImage));
 });
 
-import { initialCards } from "../components/cards.js";
-import {
-  openModal,
-  closeModal,
-  handleOverlayClose,
-} from "../components/modal.js";
-import { createCard, handleDelete, handleLike } from "../components/card.js";
+
