@@ -1,10 +1,8 @@
 // создание элемента
 
 export const createCard = (
-  element, 
-  handleDeleteCard,
-  handleLikeClick,
-  handleImageClick
+  element,
+  { handleDeleteCard, handleLikeClick, handleImageClick }
 ) => {
   const card = getTemplate();
   const cardTitle = card.querySelector(".card__title");
@@ -15,13 +13,13 @@ export const createCard = (
   cardTitle.textContent = element.name;
   cardImage.src = element.link;
   cardImage.alt = element.name;
-
+  console.log( handleDeleteCard, handleLikeClick, handleImageClick)
   cardDelete.addEventListener("click", handleDeleteCard);
 
   cardLike.addEventListener("click", handleLikeClick);
 
   cardImage.addEventListener("click", () => handleImageClick(element));
-
+  
   return card;
 };
 

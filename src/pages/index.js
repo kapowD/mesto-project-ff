@@ -10,6 +10,7 @@ import {
   handleDeleteCard,
   handleLikeClick,
 } from "../components/card.js";
+import {enableValidation, clearValidation} from "../components/validation.js";
 
 const profileDescription = document.querySelector(".profile__description");
 const profileName = document.querySelector(".profile__title");
@@ -39,32 +40,34 @@ const submitEditProfileForm = (evt) => {
   profileDescription.textContent = editProfileDescription.value;
   closeModal(editProfilePopup);
 };
-
+const handleImageClick = (element) => {
+  openModal(imagePopup);
+  imagePopupCard.src = element.link;
+  imagePopupCard.alt = element.name;
+  imagePopupCaption.textContent = element.name;
+};
+const handlers = {
+  handleDeleteCard,
+  handleLikeClick,
+  handleImageClick,
+};
 const submitAddCardButton = (evt) => {
   evt.preventDefault();
   const newPlaceElement = {
     name: addCardName.value,
     link: addCardUrl.value,
   };
-
   renderCard(
     createCard(
       newPlaceElement,
-      handleDeleteCard,
-      handleLikeClick,
-      handleOpenImage
+      handlers
     )
   );
   closeModal(addCardPopup);
   evt.target.reset();
 };
 
-const handleOpenImage = (element) => {
-  openModal(imagePopup);
-  imagePopupCard.src = element.link;
-  imagePopupCard.alt = element.name;
-  imagePopupCaption.textContent = element.name;
-};
+
 
 function setCloseByClick(popup) {
   popup.addEventListener("click", handleCloseByClick);
@@ -81,7 +84,7 @@ popups.forEach(function (popup) {
 
 initialCards.forEach((card) => {
   renderCard(
-    createCard(card, handleDeleteCard, handleLikeClick, handleOpenImage)
+    createCard(card, handlers)
   );
 });
 
@@ -89,11 +92,28 @@ editProfileButton.addEventListener("click", () => {
   openModal(editProfilePopup);
   editProfileName.value = profileName.textContent;
   editProfileDescription.value = profileDescription.textContent;
+  clearValidation(editProfileForm, validationConfig)
 });
 
 addCardButton.addEventListener("click", () => {
+  addCardForm.reset();
+  clearValidation(addCardForm, validationConfig)
   openModal(addCardPopup);
+  
 });
 
 editProfileForm.addEventListener("submit", submitEditProfileForm);
 addCardForm.addEventListener("submit", submitAddCardButton);
+
+
+
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+}
+
+enableValidation(validationConfig);
