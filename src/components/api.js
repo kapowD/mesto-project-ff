@@ -10,7 +10,7 @@ const getInitialCards = () => {
 
 }
 
-// отправка новой карточки на сервер
+
 
 const updateInitialCards = (cardName, cardLink) => {
 
@@ -30,7 +30,7 @@ const updateInitialCards = (cardName, cardLink) => {
 
 }
 
-// получение профиля с сервера
+
 
 const getProfileInfo = (profileName, profileInfo, profileAvatar) => {
 
