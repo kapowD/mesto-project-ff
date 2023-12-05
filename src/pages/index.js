@@ -11,9 +11,12 @@ import {
   handleLikeClick,
 } from "../components/card.js";
 import {enableValidation, clearValidation} from "../components/validation.js";
+import {getInitialCards, getProfileInfo, updateProfileInfo, updateInitialCards} from "../components/api.js";
 
+const promises = [getInitialCards, getProfileInfo];
 const profileDescription = document.querySelector(".profile__description");
 const profileName = document.querySelector(".profile__title");
+const profileAvatar = document.querySelector('.profile__image');
 const editProfileButton = document.querySelector(".profile__edit-button");
 const editProfilePopup = document.querySelector(".popup_type_edit");
 const editProfileForm = editProfilePopup.querySelector(".popup__form");
@@ -33,6 +36,8 @@ const imagePopup = document.querySelector(".popup_type_image");
 const imagePopupCard = imagePopup.querySelector(".popup__image");
 const imagePopupCaption = imagePopup.querySelector(".popup__caption");
 const popups = document.querySelectorAll(".popup");
+
+const newInitialCards = await getInitialCards();
 
 const submitEditProfileForm = (evt) => {
   evt.preventDefault();
@@ -57,6 +62,7 @@ const submitAddCardButton = (evt) => {
     name: addCardName.value,
     link: addCardUrl.value,
   };
+  updateInitialCards(newPlaceElement.name, newPlaceElement.link);
   renderCard(
     createCard(
       newPlaceElement,
@@ -72,6 +78,18 @@ const submitAddCardButton = (evt) => {
 function setCloseByClick(popup) {
   popup.addEventListener("click", handleCloseByClick);
 }
+Promise.all(promises)
+
+.then(() => {
+  getInitialCards()
+  // Вывод карточек на страницу
+  .then(data =>{
+    data.forEach(card => {renderCard(createCard(card, handlers))})
+  })
+  
+  // данные профиля с сервера
+  // getProfileInfo(profileName, profileTitle, profileAvatar); раскомментить как только так сразу
+})
 
 const renderCard = (cardElement) => {
   cardsContainer.prepend(cardElement);
@@ -82,11 +100,11 @@ popups.forEach(function (popup) {
   popup.classList.add("popup_is-animated");
 });
 
-initialCards.forEach((card) => {
-  renderCard(
-    createCard(card, handlers)
-  );
-});
+// initialCards.forEach((card) => {
+//   renderCard(
+//     createCard(card, handlers)
+//   );
+// });
 
 editProfileButton.addEventListener("click", () => {
   openModal(editProfilePopup);
@@ -117,3 +135,12 @@ const validationConfig = {
 }
 
 enableValidation(validationConfig);
+getInitialCards();
+
+// fetch('https://nomoreparties.co/v1/wff-cohort-1/cards', {
+//   headers: {
+//     authorization: '683144ff-c18d-4be4-8a6f-e4f83a97ea06'
+//   }
+// })
+// .then(res => res.json())
+// .then(data => console.log(data))
