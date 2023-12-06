@@ -54,7 +54,7 @@ const toggleButtonState = (inputList, submitButton, config) => {
   }
 };
 
-function clearValidation(formElement, config) {
+const clearValidation = (formElement, config) => {
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputSelector)
   );

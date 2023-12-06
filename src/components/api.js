@@ -5,12 +5,14 @@ const config = {
     "Content-Type": "application/json",
   },
 };
+
 const getResponse = (res) => {
   if (!res.ok) {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
   return res.json();
 };
+
 const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
@@ -32,6 +34,15 @@ const updateInitialCards = (cardName, cardLink) => {
   });
 };
 
+const deleteCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => {
+    return getResponse(res);
+  });
+};
+
 const likeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
@@ -40,8 +51,6 @@ const likeCard = (cardId) => {
     return getResponse(res);
   });
 };
-
-// убрать лайк
 
 const dislikeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
@@ -72,6 +81,7 @@ const updateProfileInfo = (profileName, profileInfo) => {
     return getResponse(res);
   });
 };
+
 const changeAvatar = (url) => {
   return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
@@ -92,4 +102,5 @@ export {
   changeAvatar,
   likeCard,
   dislikeCard,
+  deleteCard,
 };
