@@ -45,17 +45,18 @@ const getTemplate = () => {
 export function handleLikeClick(likeButton, likeCountElement, cardId) {
   if (likeButton.classList.contains("card__like-button_is-active")) {
     dislikeCard(cardId)
-      .then((res) => res.json())
       .then((data) => {
         likeButton.classList.remove("card__like-button_is-active");
         likeCountElement.textContent = data.likes.length;
       });
   } else {
     likeCard(cardId)
-      .then((res) => res.json())
       .then((data) => {
         likeButton.classList.add("card__like-button_is-active");
         likeCountElement.textContent = data.likes.length;
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 }

@@ -1,101 +1,88 @@
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-1",
+  headers: {
+    authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
+    "Content-Type": "application/json",
+  },
+};
+const getResponse = (res) => {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+};
 const getInitialCards = () => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-1/cards", {
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-    },
-  }).then(handleResponse);
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers,
+  }).then((res) => {
+    return getResponse(res);
+  });
 };
 
 const updateInitialCards = (cardName, cardLink) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-1/cards", {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: cardName,
       link: cardLink,
     }),
-  }).then(handleResponse);
+  }).then((res) => {
+    return getResponse(res);
+  });
 };
 
 const likeCard = (cardId) => {
-
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/cards/likes/${cardId}`, {
-    method: 'PUT',  
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-      'Content-Type': 'application/json'
-    },
-  })
-}
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then((res) => {
+    return getResponse(res);
+  });
+};
 
 // убрать лайк
 
 const dislikeCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => {
+    return getResponse(res);
+  });
+};
 
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/cards/likes/${cardId}`, {
-    method: 'DELETE',  
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-      'Content-Type': 'application/json'
-    },
-  })
-
-}
-
-const getProfileInfo = (profileName, profileInfo, profileAvatar) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-1/users/me", {
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      profileName.textContent = data.name;
-      profileInfo.textContent = data.about;
-      profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
-    })
-    .catch((err) => {
-      console.log('Ошибка. Запрос не выполнен');
-    })
+const getProfileInfo = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+  }).then((res) => {
+    return getResponse(res);
+  });
 };
 
 const updateProfileInfo = (profileName, profileInfo) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-1/users/me", {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
-    headers: {
-      authorization: "683144ff-c18d-4be4-8a6f-e4f83a97ea06",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: profileName,
       about: profileInfo,
     }),
-  }).then(handleResponse);
+  }).then((res) => {
+    return getResponse(res);
+  });
 };
 const changeAvatar = (url) => {
-
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-1/users/me/avatar`, {
-    method: 'PATCH',  
-    headers: {
-      authorization: '683144ff-c18d-4be4-8a6f-e4f83a97ea06',
-      'Content-Type': 'application/json'
-    },
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
     body: JSON.stringify({
-      avatar: url
-    })
-  })
-
-}
-const handleResponse = (response) => {
-  if (response.ok) {
-    return response.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
+      avatar: url,
+    }),
+  }).then((res) => {
+    return getResponse(res);
+  });
 };
-
 
 export {
   getInitialCards,
@@ -105,5 +92,4 @@ export {
   changeAvatar,
   likeCard,
   dislikeCard,
-  
 };
