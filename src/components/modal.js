@@ -1,13 +1,13 @@
-export function openModal(modalWindow) {
+function openModal(modalWindow) {
   modalWindow.classList.add("popup_is-opened");
   document.addEventListener("keydown", handleEscClose);
 }
-export function closeModal(modalWindow) {
+function closeModal(modalWindow) {
   modalWindow.classList.remove("popup_is-opened");
   document.removeEventListener("keydown", handleEscClose);
 }
 
-export const handleCloseByClick = (evt) => {
+const handleCloseByClick = (evt) => {
   if (
     evt.target === evt.currentTarget ||
     evt.target.classList.contains("popup__close")
@@ -22,3 +22,5 @@ const handleEscClose = (evt) => {
     closeModal(popupOpen);
   }
 };
+
+export { openModal, closeModal, handleCloseByClick}
