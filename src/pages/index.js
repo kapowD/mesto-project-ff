@@ -17,7 +17,7 @@ const promises = [getInitialCards, getProfileInfo];
 const profileDescription = document.querySelector(".profile__description");
 const profileName = document.querySelector(".profile__title");
 const profileAvatar = document.querySelector('.profile__image');
-const editProfileButton = document.querySelector(".profile__edit-button");
+const editProfileButton = document.querySelector(".profile__edit-button"); 
 const editProfilePopup = document.querySelector(".popup_type_edit");
 const editProfileForm = editProfilePopup.querySelector(".popup__form");
 const editProfileName = editProfilePopup.querySelector(
@@ -38,11 +38,23 @@ const imagePopupCaption = imagePopup.querySelector(".popup__caption");
 const popups = document.querySelectorAll(".popup");
 
 const newInitialCards = await getInitialCards();
+Promise.all(promises)
 
+.then(() => {
+  getInitialCards()
+  .then(data =>{
+    data.forEach(card => {renderCard(createCard(card, handlers))});
+  })
+  getProfileInfo(profileName, profileDescription, profileAvatar);
+})
 const submitEditProfileForm = (evt) => {
   evt.preventDefault();
   profileName.textContent = editProfileName.value;
   profileDescription.textContent = editProfileDescription.value;
+  
+  updateProfileInfo(profileName.textContent, profileDescription.textContent)
+
+  // update profile
   closeModal(editProfilePopup);
 };
 const handleImageClick = (element) => {
@@ -78,18 +90,7 @@ const submitAddCardButton = (evt) => {
 function setCloseByClick(popup) {
   popup.addEventListener("click", handleCloseByClick);
 }
-Promise.all(promises)
 
-.then(() => {
-  getInitialCards()
-  // Вывод карточек на страницу
-  .then(data =>{
-    data.forEach(card => {renderCard(createCard(card, handlers))})
-  })
-  
-  // данные профиля с сервера
-  // getProfileInfo(profileName, profileTitle, profileAvatar); раскомментить как только так сразу
-})
 
 const renderCard = (cardElement) => {
   cardsContainer.prepend(cardElement);
@@ -100,11 +101,6 @@ popups.forEach(function (popup) {
   popup.classList.add("popup_is-animated");
 });
 
-// initialCards.forEach((card) => {
-//   renderCard(
-//     createCard(card, handlers)
-//   );
-// });
 
 editProfileButton.addEventListener("click", () => {
   openModal(editProfilePopup);
