@@ -20,6 +20,7 @@
       </header>
       <main class="content">
         <section class="profile page__section">
+          <button class="profile__image-edit"></button>
           <div class="profile__image"></div>
           <div class="profile__info">
             <h1 class="profile__title"></h1>
@@ -36,7 +37,25 @@
         <p class="footer__copyright">© 2021 Mesto Russia</p>
       </footer>
 
-       <div class="popup popup_type_edit">
+      <div class="popup popup_type_edit-avatar">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="edit-avatar" data-id="">
+            <input
+              type="url"
+              name="url"
+              id="avatar-input"
+              class="popup__input popup__input_type_avatar-url"
+              placeholder="Profile Url"
+              required
+            />
+            <span class="avatar-input-error popup__input-error"></span>
+            <button type="submit" class="button popup__button">Сохранить</button>
+          </form>
+        </div>
+      </div>
+    <div class="popup popup_type_edit">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
@@ -112,6 +131,7 @@
       <p class="popup__caption"></p>
     </div>
   </div>
+  
   <!----><!--Относится к реализации 4-го спринта-->
   <div class="popup popup_type_delete-card">
     <div class="popup__content">
