@@ -170,14 +170,23 @@ const handleOpenRemoveCard = (id) => {
 const submitRemoveCard = (evt) => {
   evt.preventDefault();
   const cardId = cardDeleteButton.dataset.id;
-
+  renderLoading(
+    true,
+    evt.submitter
+  );
   deleteCard(cardId)
     .then(() => {
       const deleteTarget = document.querySelector(`[id='${cardId}']`);
       deleteTarget.remove();
       closeModal(cardDeletePopup);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      renderLoading(
+        false,
+        evt.submitter
+      );
+    });
 };
 
 const handleImageClick = (evt) => {

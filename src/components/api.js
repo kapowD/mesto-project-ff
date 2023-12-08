@@ -16,9 +16,12 @@ const getResponse = (res) => {
 const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
+    
   }).then((res) => {
     return getResponse(res);
+    
   });
+  
 };
 
 const updateInitialCards = (cardName, cardLink) => {
@@ -67,7 +70,6 @@ const getProfileInfo = () => {
   }).then((res) => {
     return getResponse(res);
   })
-  .catch(console.error);
 };
 
 const updateProfileInfo = (profileName, profileInfo) => {
