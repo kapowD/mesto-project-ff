@@ -69,7 +69,7 @@ const getProfileInfo = () => {
     headers: config.headers,
   }).then((res) => {
     return getResponse(res);
-  })
+  });
 };
 
 const updateProfileInfo = (profileName, profileInfo) => {
