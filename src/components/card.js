@@ -1,14 +1,7 @@
-// создание элемента
 
 import { likeCard, dislikeCard } from "./api.js";
 
-export const createCard = (
-  element,
-  cardOpen,
-  cardLikeFunc,
-  elementDelete,
-  myId
-) => {
+const createCard = (element, cardOpen, cardLikeFunc, elementDelete, myId) => {
   const card = getTemplate();
   card.id = element["_id"];
   const cardTitle = card.querySelector(".card__title");
@@ -48,20 +41,20 @@ const getTemplate = () => {
     .cloneNode(true);
 };
 
-export const handleLikeClick = (likeButton, likeCountElement, cardId) => {
+const handleLikeClick = (likeButton, likeCountElement, cardId) => {
   if (likeButton.classList.contains("card__like-button_is-active")) {
     dislikeCard(cardId).then((data) => {
       likeButton.classList.remove("card__like-button_is-active");
       likeCountElement.textContent = data.likes.length;
-    });
+    })
+    .catch(console.error);
   } else {
     likeCard(cardId)
       .then((data) => {
         likeButton.classList.add("card__like-button_is-active");
         likeCountElement.textContent = data.likes.length;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error);
   }
 };
+export { createCard, handleLikeClick };

@@ -15,7 +15,7 @@ import {
   deleteCard,
 } from "../components/api.js";
 
-const promises = [getInitialCards, getProfileInfo];
+
 
 const profileDescription = document.querySelector(".profile__description");
 const profileName = document.querySelector(".profile__title");
@@ -55,19 +55,14 @@ const popups = document.querySelectorAll(".popup");
 
 let myId = "";
 
-Promise.all(promises).then(() => {
-  getProfileInfo()
-    .then((data) => {
-      myId = data["_id"];
-      profileName.textContent = data.name;
-      profileDescription.textContent = data.about;
-      profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  getInitialCards().then((data) => {
-    data.forEach((card) => {
+Promise.all([getProfileInfo(), getInitialCards()])
+  .then(([userData, cards]) => {
+    myId = userData["_id"];
+    profileName.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileAvatar.style.backgroundImage = `url('${userData.avatar}')`;
+
+    cards.reverse().forEach((card) => {
       renderCard(
         createCard(
           card,
@@ -78,8 +73,9 @@ Promise.all(promises).then(() => {
         )
       );
     });
-  });
-});
+  })
+  .catch(console.error);
+
 
 const renderLoading = (isLoading, formButton) => {
   if (isLoading) {
@@ -93,7 +89,7 @@ const submitEditProfileForm = (evt) => {
   evt.preventDefault();
   renderLoading(
     true,
-    editProfileForm.querySelector(validationConfig.submitButtonSelector)
+    evt.submitter // thanks for cool tips :)
   );
   updateProfileInfo(editProfileName.value, editProfileDescription.value)
     .then((data) => {
@@ -101,23 +97,21 @@ const submitEditProfileForm = (evt) => {
       profileDescription.textContent = data.about;
       closeModal(editProfilePopup);
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch(console.error)
     .finally(() => {
       renderLoading(
         false,
-        editProfileForm.querySelector(validationConfig.submitButtonSelector)
+        evt.submitter
       );
     });
-  closeModal(editProfilePopup);
+
 };
 
 const submitAddCardButton = (evt) => {
   evt.preventDefault();
   renderLoading(
     true,
-    addCardForm.querySelector(validationConfig.submitButtonSelector)
+    evt.submitter
   );
   const newPlaceElement = {
     name: addCardName.value,
@@ -134,18 +128,17 @@ const submitAddCardButton = (evt) => {
           myId
         )
       );
+      closeModal(addCardPopup);
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch(console.error)
     .finally(() => {
       renderLoading(
         false,
-        addCardForm.querySelector(validationConfig.submitButtonSelector)
+        evt.submitter
       );
     });
 
-  closeModal(addCardPopup);
+  
   evt.target.reset();
 };
 
@@ -153,20 +146,18 @@ const submitChangeAvatar = (evt) => {
   evt.preventDefault();
   renderLoading(
     true,
-    editAvatarForm.querySelector(validationConfig.submitButtonSelector)
+    evt.submitter
   );
   changeAvatar(avatarFormInput.value)
     .then((data) => {
       profileAvatar.style.backgroundImage = `url('${data.avatar}')`;
       closeModal(editAvatarPopup);
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch(console.error)
     .finally(() => {
       renderLoading(
         false,
-        editAvatarForm.querySelector(validationConfig.submitButtonSelector)
+        evt.submitter
       );
     });
 };
@@ -186,9 +177,7 @@ const submitRemoveCard = (evt) => {
       deleteTarget.remove();
       closeModal(cardDeletePopup);
     })
-    .catch((err) => {
-      console.log(err);
-    });
+    .catch(console.error);
 };
 
 const handleImageClick = (evt) => {

@@ -66,7 +66,8 @@ const getProfileInfo = () => {
     headers: config.headers,
   }).then((res) => {
     return getResponse(res);
-  });
+  })
+  .catch(console.error);
 };
 
 const updateProfileInfo = (profileName, profileInfo) => {
